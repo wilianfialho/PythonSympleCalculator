@@ -1,47 +1,65 @@
 import numpy as np
 
+
 def calculator():
-    operations = ['+', '-', '*', '/','%', '^', 'sin', 'cos', 'tan', 'log']
-    operation = input("Selecione uma operação (+, -, *, /, %, ^, sin, cos, tan, log): ")
-    if operation not in operations:
-        print(f"Operação inválida. Por favor, selecione uma das seguintes operações: {operations}")
-        return
+    # Operadores matemáticos binários (+, -, *, /, %, ^)
+    binary_operations = ['+', '-', '*', '/', '%', '^']
+    # Operadores matemáticos unários (sin, cos, tan, log)
+    unary_operations = ['sin', 'cos', 'tan', 'log']
 
-    try:
-        num1 = float(input("Digite o primeiro número: "))
-    except ValueError:
-        print("Por favor, digite um número válido.")
-        return
+    print("Bem-vindo(a) à calculadora!")
+    while True:
+        operation = input("Selecione uma operação (+, -, *, /, %, ^, sin, cos, tan, log) ou 'q' para sair: ")
+        if operation == 'q':
+            print("Encerrando a calculadora.")
+            break
+        if operation not in binary_operations + unary_operations:
+            print(f"Operação inválida. Por favor, selecione uma das seguintes operações: {binary_operations + unary_operations}")
+            continue
 
-    if operation in ['sin', 'cos', 'tan', 'log']:
-        result = np.sin(num1) if operation == 'sin' else \
-                 np.cos(num1) if operation == 'cos' else \
-                 np.tan(num1) if operation == 'tan' else \
-                 np.log(num1)
-        print(f"Resultado: {result}")
-        return
-    
-    try:
-        num2 = float(input("Digite o segundo número: "))
-    except ValueError:
-        print("Por favor, digite um número válido.")
-        return
+        try:
+            num1 = float(input("Digite o primeiro número: "))
+        except ValueError:
+            print("Por favor, digite um número válido.")
+            continue
 
-    if operation == '/' and num2 == 0:
-        print("Não é possível dividir por zero.")
-        return
+        if operation in unary_operations:
+            if operation == 'log':
+                try:
+                    base = float(input("Digite a base do logaritmo: "))
+                except ValueError:
+                    print("Por favor, digite um número válido para a base.")
+                    continue
+                result = np.log(num1) / np.log(base)
+            else:
+                result = getattr(np, operation)(num1)
+            print(f"Resultado: {result:.2f}")
+            continue
 
-    if operation == '+':
-        result = num1 + num2
-    elif operation == '-':
-        result = num1 - num2
-    elif operation == '*':
-        result = num1 * num2
-    elif operation == '/':
-        result = num1 / num2
-    elif operation == '%':
-        result = num1 % num2
-    else:  # operation == '^'
-        result = num1 ** num2
+        try:
+            num2 = float(input("Digite o segundo número: "))
+        except ValueError:
+            print("Por favor, digite um número válido.")
+            continue
 
-    print(f"Resultado: {result}")
+        if operation == '/' and num2 == 0:
+            print("Não é possível dividir por zero.")
+            continue
+
+        if operation == '+':
+            result = num1 + num2
+        elif operation == '-':
+            result = num1 - num2
+        elif operation == '*':
+            result = num1 * num2
+        elif operation == '/':
+            result = num1 / num2
+        elif operation == '%':
+            result = num1 % num2
+        else:  # operation == '^'
+            result = num1 ** num2
+
+        print(f"Resultado: {result:.2f}")
+
+
+calculator()
